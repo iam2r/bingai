@@ -4,7 +4,10 @@
   <div class="chat-help-box">
     <h3>设置用户</h3>
     <ul>
-      <li>访问 https://www.bing.com/ 或 https://cn.bing.com/ ，登录</li>
+      <li>
+        访问 <a target="_blank" href="https://www.bing.com/">https://www.bing.com/</a> 或
+        <a target="_blank" href="https://cn.bing.com/">https://cn.bing.com/</a> ，登录
+      </li>
       <li>
         <ul>
           <li>电脑：F12 或 Ctrl + Shift + I 打开控制台</li>
