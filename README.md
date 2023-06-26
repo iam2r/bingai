@@ -190,7 +190,7 @@ RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 
 > ⭐ Vercel 部署不支持 Websocket ，需选择 官方聊天服务器 或 Cloudflare
 
-一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/iam2r/bingai&project-name=go-proxy-bingai&repository-name=go-proxy-bingai-vercel)
+一键部署，点这里 => [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/iam2r/bingai&project-name=bingai&repository-name=bingai)
 
 ![Vercel 一键部署](./docs/img/vercel-1.png)
 
