@@ -52,7 +52,7 @@
 </template>
 <style  scoped>
 .chat-help-box {
-  max-height: calc(100vh - 5px);
+  max-height: 85vh;
   overflow-y: scroll;
 }
 
