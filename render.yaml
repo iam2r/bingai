@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: go-proxy-bingai
+    name: bingai
     # oregon: frankfurt
     plan: free
     env: go
