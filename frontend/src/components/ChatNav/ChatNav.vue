@@ -174,9 +174,6 @@ const saveUserToken = () => {
       <div class="text-3xl py-2">设置用户:教程</div>
     </template>
     <ChatTokenHelp/>
-    <template #action>
-      <NButton size="large" @click="isShowHelpModal = false">关闭</NButton>
-    </template>
   </NModal>
   <NModal v-model:show="isShowSetTokenModal" preset="dialog" :show-icon="false">
     <template #header>
