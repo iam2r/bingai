@@ -9,7 +9,6 @@ pinned: false
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
 
-# 测试
 
 # go-proxy-bing
 
