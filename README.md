@@ -115,8 +115,8 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 ## 环境变量
 
 ```bash
-# 运行端口 默认 8080 可选
-PORT=8080
+# 运行端口 默认 7860 可选
+PORT=7860
 # Socks 环境变量 示例 可选
 Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
 # Socks 账号、密码 可选
@@ -146,10 +146,10 @@ Go_Proxy_BingAI_AUTH_KEY=xxx
 
 ```bash
 # 运行容器 监听8080 端口
-docker run -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
+docker run -d -p 7860:7860 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
 
 # 配置 socks 环境变量
-docker run -e Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070 -e Go_Proxy_BingAI_SOCKS_USER=xxx -e Go_Proxy_BingAI_SOCKS_PWD=xxx -d -p 8080:8080 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
+docker run -e Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070 -e Go_Proxy_BingAI_SOCKS_USER=xxx -e Go_Proxy_BingAI_SOCKS_PWD=xxx -d -p 7860:7860 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
 ```
 
 - docker compose 示例
@@ -166,7 +166,7 @@ services:
     # 自启动
     restart: unless-stopped
     ports:
-      - 8080:8080
+      - 7860:7860
     # environment:
     #   - Go_Proxy_BingAI_SOCKS_URL=192.168.0.88:1070
     #   - Go_Proxy_BingAI_SOCKS_USER=xxx
@@ -184,7 +184,7 @@ services:
 > 主要配置 Dockerfile 路径 及 端口就可以
 
 ```bash
-PORT=8080
+PORT=7860
 RAILWAY_DOCKERFILE_PATH=docker/Dockerfile
 ```
 
