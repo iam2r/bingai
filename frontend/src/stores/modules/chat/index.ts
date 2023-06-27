@@ -22,7 +22,7 @@ export const useChatStore = defineStore(
     const chatHubPath = "/sydney/ChatHub";
     const isShowChatServiceSelectModal = ref(false);
     const selectedSydneyBaseUrl = ref("");
-    const sydneyConfigs = ref<SydneyConfig[]>([
+    const createDefaultSydneyConfigs = () => [
       {
         baseUrl: "https://sydney.bing.com",
         label: "Bing 官方",
@@ -33,7 +33,8 @@ export const useChatStore = defineStore(
         label: "自定义",
         isCus: true,
       },
-    ]);
+    ];
+    const sydneyConfigs = ref<SydneyConfig[]>(createDefaultSydneyConfigs());
     const sydneyCheckTimeoutMS = 3000;
 
     const checkSydneyConfig = async (
@@ -84,8 +85,20 @@ export const useChatStore = defineStore(
           const checkResult = await checkSydneyConfig(config);
           config.isUsable = checkResult.isUsable;
           config.delay = checkResult.delay;
+          return config;
         });
-      await Promise.all(checkAllConfigPromises);
+      return await Promise.all(checkAllConfigPromises);
+    };
+
+    const resetSydneyConfigs = async () => {
+      sydneyConfigs.value = createDefaultSydneyConfigs();
+      const configs = await checkAllSydneyConfig();
+      const config =
+        configs.find((it) => it.isUsable) ||
+        configs.find((it) => it.label === "Cloudflare") ||
+        configs[0];
+      selectedSydneyBaseUrl.value = config.baseUrl;
+      CIB.config.sydney.baseUrl = config.baseUrl;
     };
 
     return {
@@ -94,6 +107,7 @@ export const useChatStore = defineStore(
       selectedSydneyBaseUrl,
       checkSydneyConfig,
       checkAllSydneyConfig,
+      resetSydneyConfigs,
     };
   },
   {
