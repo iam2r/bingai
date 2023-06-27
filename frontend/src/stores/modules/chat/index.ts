@@ -1,5 +1,6 @@
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
+import { ref } from "vue";
+import { defineStore } from "pinia";
+import { sydneyConfigs as sydneyConfigsCommon } from "@/utils/config";
 
 export interface SydneyConfig {
   baseUrl: string;
@@ -16,43 +17,39 @@ export interface CheckSydneyConfigResult {
 }
 
 export const useChatStore = defineStore(
-  'chat-store',
+  "chat-store",
   () => {
-    const chatHubPath = '/sydney/ChatHub';
-
+    const chatHubPath = "/sydney/ChatHub";
     const isShowChatServiceSelectModal = ref(false);
-    const selectedSydneyBaseUrl = ref('');
+    const selectedSydneyBaseUrl = ref("");
     const sydneyConfigs = ref<SydneyConfig[]>([
       {
-        baseUrl: 'https://sydney.bing.com',
-        label: 'Bing 官方',
+        baseUrl: "https://sydney.bing.com",
+        label: "Bing 官方",
       },
+      ...sydneyConfigsCommon,
       {
-        baseUrl: 'https://sydney.vcanbb.chat',
-        label: 'Cloudflare',
-      },
-      {
-        baseUrl: location.origin,
-        label: '本站',
-      },
-      {
-        baseUrl: '',
-        label: '自定义',
+        baseUrl: "",
+        label: "自定义",
         isCus: true,
       },
     ]);
     const sydneyCheckTimeoutMS = 3000;
 
-    const checkSydneyConfig = async (config: SydneyConfig): Promise<CheckSydneyConfigResult> => {
+    const checkSydneyConfig = async (
+      config: SydneyConfig
+    ): Promise<CheckSydneyConfigResult> => {
       if (!config.baseUrl) {
         return {
           isUsable: false,
-          errorMsg: '链接不可为空',
+          errorMsg: "链接不可为空",
         };
       }
       try {
         const startTime = Date.now();
-        const ws = new WebSocket(config.baseUrl.replace('http', 'ws') + chatHubPath);
+        const ws = new WebSocket(
+          config.baseUrl.replace("http", "ws") + chatHubPath
+        );
         const wsTimer = setTimeout(() => {
           ws.close();
         }, sydneyCheckTimeoutMS);
@@ -65,7 +62,8 @@ export const useChatStore = defineStore(
             clearTimeout(wsTimer);
             reject(new Error(`聊天服务器 ${config.baseUrl} 连接失败`));
           };
-          ws.onclose = () => reject(new Error(`聊天服务器 ${config.baseUrl} 连接超时`));
+          ws.onclose = () =>
+            reject(new Error(`聊天服务器 ${config.baseUrl} 连接超时`));
         });
         return {
           isUsable: true,
@@ -74,7 +72,7 @@ export const useChatStore = defineStore(
       } catch (error) {
         return {
           isUsable: false,
-          errorMsg: error instanceof Error ? error.message : '',
+          errorMsg: error instanceof Error ? error.message : "",
         };
       }
     };
@@ -100,9 +98,9 @@ export const useChatStore = defineStore(
   },
   {
     persist: {
-      key: 'chat-store',
+      key: "chat-store",
       storage: localStorage,
-      paths: ['selectedSydneyBaseUrl', 'sydneyConfigs'],
+      paths: ["selectedSydneyBaseUrl", "sydneyConfigs"],
     },
   }
 );

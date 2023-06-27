@@ -45,10 +45,6 @@ const navType = {
 };
 const navConfigs = [
   {
-    key: navType.version,
-    label: "版本信息",
-  },
-  {
     key: navType.chatService,
     label: "服务选择",
   },

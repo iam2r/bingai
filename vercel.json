@@ -1,28 +1,28 @@
 {
-  "installCommand": "cd ./frontend & npm install",
-  "buildCommand": "npm run build",
+  "name": "go-proxy-bingai",
+  "version": 2,
   "builds": [
     {
       "src": "/api/{index,web,sydney,sys-config}.go",
       "use": "@vercel/go"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/sysconf",
-      "destination": "/api/sys-config.go"
+      "src": "/sysconf",
+      "dest": "/api/sys-config.go"
     },
     {
-      "source": "/sydney/.*",
-      "destination": "/api/sydney.go"
+      "src": "/sydney/.*",
+      "dest": "/api/sydney.go"
     },
     {
-      "source": "/web/.*",
-      "destination": "/api/web.go"
+      "src": "/web/.*",
+      "dest": "/api/web.go"
     },
     {
-      "source": "/.*",
-      "destination": "/api/index.go"
+      "src": "/.*",
+      "dest": "/api/index.go"
     }
   ]
 }
