@@ -1,18 +1,19 @@
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
-import cookies from '@/utils/cookies';
-import { sleep } from '@/utils/utils';
-import sysconfApi from '@/api/sysconf';
-import { ApiResultCode } from '@/api/model/ApiResult';
-import type { SysConfig } from '@/api/model/sysconf/SysConfig';
+import { ref } from "vue";
+import { defineStore } from "pinia";
+import cookies from "@/utils/cookies";
+import { sleep } from "@/utils/utils";
+import sysconfApi from "@/api/sysconf";
+import { ApiResultCode } from "@/api/model/ApiResult";
+import type { SysConfig } from "@/api/model/sysconf/SysConfig";
+import { sydneyConfigs } from "@/utils/config";
 
 export const useUserStore = defineStore(
-  'user-store',
+  "user-store",
   () => {
     const maxTryCreateConversationIdCount = 10;
-    const userTokenCookieName = '_U';
-    const randIpCookieName = 'BingAI_Rand_IP';
-    const authKeyCookieName = 'BingAI_Auth_Key';
+    const userTokenCookieName = "_U";
+    const randIpCookieName = "BingAI_Rand_IP";
+    const authKeyCookieName = "BingAI_Auth_Key";
 
     const sysConfig = ref<SysConfig>();
 
@@ -29,7 +30,9 @@ export const useUserStore = defineStore(
 
     const getConversationExpiry = () => {
       const B = new Date();
-      return B.setMinutes(B.getMinutes() + CIB.config.sydney.expiryInMinutes), B;
+      return (
+        B.setMinutes(B.getMinutes() + CIB.config.sydney.expiryInMinutes), B
+      );
     };
 
     const tryCreateConversationId = async (tryCount = 0) => {
@@ -37,25 +40,35 @@ export const useUserStore = defineStore(
         console.log(`已重试 ${tryCount} 次，自动创建停止`);
         return;
       }
-      const conversationRes = await fetch('/turing/conversation/create', {
-        credentials: 'include',
+
+      const baseUrls = sydneyConfigs.map((it) => it.baseUrl);
+      const url =
+        baseUrls[tryCount % (baseUrls.length - 1)] +
+        "/turing/conversation/create";
+      const conversationRes = await fetch(url, {
+        credentials: "include",
       })
         .then((res) => res.json())
         .catch((err) => `error`);
-      if (conversationRes?.result?.value === 'Success') {
-        console.log('成功创建会话ID : ', conversationRes.conversationId);
-        CIB.manager.conversation.updateId(conversationRes.conversationId, getConversationExpiry(), conversationRes.clientId, conversationRes.conversationSignature);
+      if (conversationRes?.result?.value === "Success") {
+        console.log("成功创建会话ID : ", conversationRes.conversationId);
+        CIB.manager.conversation.updateId(
+          conversationRes.conversationId,
+          getConversationExpiry(),
+          conversationRes.clientId,
+          conversationRes.conversationSignature
+        );
       } else {
         await sleep(300);
         tryCount += 1;
         console.log(`开始第 ${tryCount} 次重试创建会话ID`);
-        cookies.set(randIpCookieName, '', -1);
+        cookies.set(randIpCookieName, "", -1);
         tryCreateConversationId(tryCount);
       }
     };
 
     const getUserToken = () => {
-      const userCookieVal = cookies.get(userTokenCookieName) || '';
+      const userCookieVal = cookies.get(userTokenCookieName) || "";
       return userCookieVal;
     };
 
@@ -72,7 +85,7 @@ export const useUserStore = defineStore(
     };
 
     const saveUserToken = (token: string) => {
-      cookies.set(userTokenCookieName, token, 7 * 24 * 60, '/');
+      cookies.set(userTokenCookieName, token, 7 * 24 * 60, "/");
     };
 
     const setAuthKey = (authKey: string) => {
@@ -101,9 +114,9 @@ export const useUserStore = defineStore(
     };
 
     const resetCache = async () => {
-      cookies.set(userTokenCookieName, '', -1);
-      cookies.set(randIpCookieName, '', -1);
-      cookies.set(authKeyCookieName, '', -1);
+      cookies.set(userTokenCookieName, "", -1);
+      cookies.set(randIpCookieName, "", -1);
+      cookies.set(authKeyCookieName, "", -1);
       await clearCache();
     };
 
@@ -119,7 +132,7 @@ export const useUserStore = defineStore(
   },
   {
     persist: {
-      key: 'user-store',
+      key: "user-store",
       storage: localStorage,
       paths: [],
     },

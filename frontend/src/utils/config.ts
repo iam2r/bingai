@@ -4,10 +4,6 @@ export const sydneyConfigs = [
     label: "本站",
   },
   {
-    baseUrl: "https://bing-render.vcanbb.top",
-    label: "Render",
-  },
-  {
     baseUrl: "https://sydney.vcanbb.chat",
     label: "Cloudflare",
   },
