@@ -13,8 +13,9 @@ import settingSvgUrl from "@/assets/img/setting.svg?url";
 import { usePromptStore } from "@/stores/modules/prompt";
 import { storeToRefs } from "pinia";
 import ChatNavItem from "./ChatNavItem.vue";
-import ChatTokenHelp from "./Help.vue"
+import ChatTokenHelp from "./Help.vue";
 import type { Component } from "vue";
+import { onMounted, onBeforeUnmount } from "vue";
 import { isMobile } from "@/utils/utils";
 import CreateImage from "@/components/CreateImage/CreateImage.vue";
 import { useChatStore } from "@/stores/modules/chat";
@@ -131,19 +132,37 @@ const saveUserToken = () => {
   userStore.saveUserToken(userToken.value);
   isShowSetTokenModal.value = false;
 };
+const mobileBodySettingHack = (e: MouseEvent) => {
+  if (!isMobile()) return;
+  const els = document.querySelectorAll(".mobile-setting-body-exclude");
+  if (Array.from(els).some((it) => it.contains(e.target as Element))) {
+    return;
+  }
+  if (isShowMore.value) {
+    isShowMore.value = false;
+  }
+};
+
+onMounted(() => {
+  window.document.body.addEventListener("click", mobileBodySettingHack);
+});
+
+onBeforeUnmount(() => {
+  window.document.body.removeEventListener("click", mobileBodySettingHack);
+});
 </script>
 
 <template>
   <NDropdown
     v-if="isMobile()"
-    class="select-none"
+    class="select-none mobile-setting-body-exclude"
     :show="isShowMore"
     :options="navConfigs"
     :render-label="renderDropdownLabel"
     @select="handleSelect"
   >
     <NImage
-      class="fixed top-6 right-4 cursor-pointer z-50"
+      class="fixed top-6 right-4 cursor-pointer z-50 mobile-setting-body-exclude"
       :src="settingSvgUrl"
       alt="设置菜单"
       :preview-disabled="true"
@@ -169,7 +188,7 @@ const saveUserToken = () => {
     <template #header>
       <div class="text-3xl py-2">设置用户:教程</div>
     </template>
-    <ChatTokenHelp/>
+    <ChatTokenHelp />
   </NModal>
   <NModal v-model:show="isShowSetTokenModal" preset="dialog" :show-icon="false">
     <template #header>

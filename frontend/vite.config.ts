@@ -3,6 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import pkg from './package.json';
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 const { name, version, dependencies, devDependencies } = pkg;
 const __APP_INFO__ = {
@@ -78,7 +79,7 @@ export default defineConfig(({ command, mode }) => {
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
-    plugins: [vue(), VitePWA(initPwaOptions(env))],
+    plugins: [vue(), VitePWA(initPwaOptions(env)),...mode==='development'?[basicSsl()]:[]],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
